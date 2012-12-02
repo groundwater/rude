@@ -1,6 +1,6 @@
-# Rude Distributed CMS
+# Rude Distributed Asset Management
 
-Rude is a distributed asset management system.
+Rude is a distributed asset management system for web projects.
 
 - rude is a command-line driven
 - rude is distributed
@@ -14,9 +14,10 @@ Installation of the Rude package is done via NPM:
 
     npm install -g rude
 
-- Rude uses a local [CouchDB](http://couchdb.apache.org/) database to back its collection of assets.
+_Dependencies_:
 
-**CouchDB must be installed separately**
+- Rude uses a local [CouchDB](http://couchdb.apache.org/) database to back its collection of assets.
+- **CouchDB must be installed separately**
 
 ### CouchDB on Mac OS X
 
@@ -111,8 +112,19 @@ This will echo something like:
 
 ## Sharing
 
+> **Status** Planned
+
 A system is not distributed unless without sharing between peers.
 Rude uses CouchDB replication to synchronize repositories.
+
+You can manage replication using CouchDB, or have Rude trigger replication manually:
+
+    $ rude push https://some-server/rude
+
+This will replicate your database changes to the remote server.
+You can pull down changes from the server with 
+
+    $ rude pull https://some-server/rude
 
 ## Production
 
