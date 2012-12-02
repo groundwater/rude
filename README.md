@@ -52,6 +52,8 @@ Create a new local repository:
     [OKAY] New local rude database initialized at http://localhost:5984/rude
 
 Rude expects to be initialized at the root of your Git checkout directory.
+The `init` command is idempotent, calling `init` on an existing project
+will not overwrite an existing setup.
 
 ### Tracking Assets
 
@@ -72,7 +74,13 @@ You can explicitly force updating an asset with `-f`:
     [OKAY] Existing asset 'file.ext' replaced
     [INFO] Asset id 7e792aa144129cec0c25b1e2bd55bee50d30b866
 
-You should make sure your assets are not tracked by Git.
+Your `assets.json` file _should_ be tracked by git,
+and is explicitly formatted to make merging easier.
+This file contains explicit pointers to all your assets,
+each represented by a unique SHA-1 hash.
+Assets will always match your current branch.
+
+- You should not track assets in Git.
 
 ### Rude Manifest
 
