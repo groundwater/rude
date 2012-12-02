@@ -1,0 +1,16 @@
+{
+  "name": "rude",
+  "version": "0.0.0",
+  "description": "Distributed Asset Management",
+  "main": "index.js",
+  "repository": "",
+  "author": "Jacob Groundwater",
+  "license": "BSD",
+  "bin":{
+    "rude": "bin/rude.js"
+  },
+  "dependencies": {
+    "cradle": "latest",
+    "commander": "latest"
+  }
+}
