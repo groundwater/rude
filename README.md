@@ -5,6 +5,7 @@ Rude is a distributed asset management system for web projects.
 - rude is a command-line driven
 - rude is distributed
 - rude plays nicely with git
+- rude stores assets in CouchDB
 
 Rude keeps your git repositories _lean_ and focused on the code.
 
@@ -16,7 +17,7 @@ Installation of the Rude package is done via NPM:
 
 _Dependencies_:
 
-- Rude uses a local [CouchDB](http://couchdb.apache.org/) database to back its collection of assets.
+- Rude uses a local [CouchDB](http://couchdb.apache.org/) database to store assets.
 - **CouchDB must be installed separately**
 
 ### CouchDB on Mac OS X
