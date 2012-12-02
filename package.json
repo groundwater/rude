@@ -3,14 +3,32 @@
   "version": "0.0.0",
   "description": "Distributed Asset Management",
   "main": "index.js",
-  "repository": "",
-  "author": "Jacob Groundwater",
+  "keywords": [
+    "git",
+    "asset",
+    "assets",
+    "distributed",
+    "couchdb"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jacobgroundwater/rude.git"
+  },
+  "author": {
+    "name": "Jacob Groundwater",
+    "email": "groundwater@gmail.com",
+    "url": "https://github.com/jacobgroundwater"
+  },
   "license": "BSD",
+  "bugs":{
+    "url" : "https://github.com/jacobgroundwater/rude/issues"
+  },
   "bin":{
     "rude": "bin/rude.js"
   },
   "dependencies": {
     "cradle": "latest",
     "commander": "latest"
-  }
+  },
+  "preferGlobal": true
 }
