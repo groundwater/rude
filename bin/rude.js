@@ -134,12 +134,8 @@ program
 	var file = fs.readFileSync(program.file)
 	var json = JSON.parse(file)
 	
-	Object.keys(json).forEach(function(name){
-		var hash = json[name]
-		var asset_url = url + '/' + hash + '/' + name
-		console.log('[INFO] Uploading %s',name)
-		console.log('       --> %s',asset_url)
-	})
+	require('../lib/ssh').publish( json, db, url )
+	
 })
 
 program.parse(process.argv)

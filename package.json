@@ -20,15 +20,18 @@
     "url": "https://github.com/jacobgroundwater"
   },
   "license": "BSD",
-  "bugs":{
-    "url" : "https://github.com/jacobgroundwater/rude/issues"
+  "bugs": {
+    "url": "https://github.com/jacobgroundwater/rude/issues"
   },
-  "bin":{
+  "bin": {
     "rude": "bin/rude.js"
   },
   "dependencies": {
     "cradle": "latest",
-    "commander": "latest"
+    "commander": "latest",
+    "ssh2": "~0.1.6",
+    "colors": "~0.6.0-1",
+    "async": "~0.1.22"
   },
   "preferGlobal": true
 }
