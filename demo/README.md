@@ -1,5 +1,8 @@
 # Demo Project
 
+The following project runs with and without asset management.
+Try out both examples, viewing the source of each page.
+
 ## Without Asset Management
 
 Use [foreman](https://npmjs.org/package/foreman) to run the application as-is.
@@ -29,7 +32,7 @@ Run the express application again:
     [OKAY] Trimming display Output to 97 Columns
     13:08:42 web.1 |  Express Server Listening on Port: 5000
 
-Check out http://localhost:5000`, and view the page source.
+Check out `http://localhost:5000`, and view the page source.
 You can see the asset is now being served from the local CouchDB database.
 
 There is no need to keep your image in Git anymore:
