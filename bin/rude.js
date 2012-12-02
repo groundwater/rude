@@ -16,13 +16,11 @@ function Error(){
 }
 
 function strip(path){
-	var paths = path.split('.')
+	var paths = path.split('/')
 	
 	if(paths.length==1) return path
 	
-	paths.pop()
-	
-	return paths.join('.')
+	return paths.pop()
 }
 
 program.version('0.0.0');
@@ -66,7 +64,7 @@ program
 	
 	var db     = connect(program.host,program.port,program.name)
 	
-	var name   = command.name || asset
+	var name   = command.name || strip(asset)
 	var shasum = crypto.createHash('sha1');
 	
 	var file   = fs.readFileSync(asset)
@@ -91,7 +89,7 @@ program
 		
 		db.saveAttachment(res,attachment,function(err,ok){
 			if(err) return Error(err)
-			console.log('Asset Added:',asset)
+			console.log('Asset Added:',name)
 			
 			json[name] = hash
 			fs.writeFileSync(program.file, JSON.stringify(json,null,'\t'))

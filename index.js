@@ -28,28 +28,20 @@ module.exports.config = function(prefix,config){
 		
 		var stat = fs.existsSync(assets_file)
 		
-		console.log(stat)
-		
 		var file
 		if(stat){
 			file = fs.readFileSync(assets_file)
+			try{
+				resolved_config = JSON.parse(file)
+			}catch(e){
+				console.warn('[WARN] Assets File %s Courrupted',assets_file)
+				resolved_config = {}
+			}
 		}else{
 			console.warn('[WARN] No Assets File Found (%s)',assets_file)
-			return function(){
-				console.warn('[FAIL] No Assets File Found')
-				return '[Rude failed to find assets file]'
-			}
+			resolved_config = {}
 		}
 		
-		try{
-			resolved_config = JSON.parse(file)
-		}catch(e){
-			console.warn('[WARN] Assets File %s Courrupted',assets_file)
-			return function(){
-				console.warn('[FAIL] Assets File Courrupted')
-				return '[Rude assets file courrupted]'
-			}
-		}
 	}
 	
 	return function(asset){
@@ -58,7 +50,7 @@ module.exports.config = function(prefix,config){
 			return join(resolved_prefix,hash,asset)
 		}else{
 			console.error('Missing Asset %s',asset)
-			return join(resolved_prefix,'404')
+			return asset
 		}
 	}
 }
