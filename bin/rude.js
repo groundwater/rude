@@ -56,26 +56,6 @@ program
 	
 })
 
-function git_ignore(ignore_file,ignore_path){
-	
-	var data
-	if( fs.existsSync(ignore_file) ){
-		data = fs.readFileSync(ignore_file).toString()
-	}
-	
-	var match = false
-	var lines = data ? data.split('\n') : []
-	lines.forEach(function(line){
-		if(line === ignore_path) match = true
-	})
-	
-	if(!match){
-		lines.push( ignore_path )
-		fs.writeFileSync(ignore_file,lines.join('\n'))
-	}
-	
-}
-
 program
 .command('add')
 .option('-n, --name <NAME>', 'track asset using NAME', null)
@@ -115,8 +95,6 @@ program
 			
 			json[name] = hash
 			fs.writeFileSync(program.file, JSON.stringify(json,null,'\t'))
-			
-			git_ignore('.gitignore',asset)
 			
 		})
 		
