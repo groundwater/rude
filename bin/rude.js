@@ -113,6 +113,10 @@ program
 	})
 })
 
+var publishers = {
+	'git': require('../lib/ssh').publish
+}
+
 program
 .command('publish')
 .usage([
@@ -134,7 +138,13 @@ program
 	var file = fs.readFileSync(program.file)
 	var json = JSON.parse(file)
 	
-	require('../lib/ssh').publish( json, db, url )
+	var cons = url.split('://')
+	var prot = cons[0]
+	var dest = cons[1]
+	
+	if(!dest) return Error('Invalid URL, see `rude -h` for more info')
+	
+	publishers[prot]( json, db, dest )
 	
 })
 
