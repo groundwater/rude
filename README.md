@@ -14,7 +14,7 @@ Installation of the Rude package is done via NPM:
 
     npm install -g rude
 
-Rude uses a local [CouchDB](http://couchdb.apache.org/) database to back its collection of assets.
+- Rude uses a local [CouchDB](http://couchdb.apache.org/) database to back its collection of assets.
 
 **CouchDB must be installed separately**
 
@@ -28,10 +28,10 @@ Homebrew will guide you how to make CouchDB auto-start if you require.
 
 ## Assets
 
-Rude manages assets.
-A typical web project contains may contain a lot of images,
-videos, gzipped downloads, etc.
+Rude manages assets for web projects.
 
+A web project may contain a lot of images,
+videos, gzipped downloads, etc.
 These are inappropriate for storage in Git.
 Git sees a project in its entirety, 
 and shuffling large binary assets in and out will bloat your repository.
@@ -43,7 +43,7 @@ and easy to track using Git.
 
 ## Usage
 
-**Status** Alpha
+> **Status** Alpha
 
 Create a new local repository:
 
@@ -54,7 +54,7 @@ Rude expects to be initialized at the root of your Git checkout directory.
 
 ### Tracking Assets
 
-**Status** Alpha
+> **Status** Alpha
 
 Track assets by adding them to the Rude database:
 
@@ -74,7 +74,7 @@ and update the Rude manifest.
 
 ### Rude Manifest
 
-**Status** Alpha
+> **Status** Alpha
 
 The Rude manifest is a single file at the root of your Git repository
 called `assets.json`.
@@ -96,7 +96,7 @@ Rude returns URLs from your local CouchDB database.
 
 ### Node.js
 
-**Status** Alpha
+> **Status** Alpha
 
 Require Rude somewhere in your project:
 
@@ -116,7 +116,7 @@ Rude uses CouchDB replication to synchronize repositories.
 
 ## Production
 
-**Status** Planned
+> **Status** Planned
 
 When your project is ready for production,
 Rude can upload your assets to their appropriate servers, or distribution networks.
