@@ -42,7 +42,7 @@ without losing the guaruntees afforded by Git.
 Rude tracks your assets in a single inventory file that is lean,
 and easy to track using Git.
 
-## Usage
+## Command Line Usage
 
 > **Status** Alpha
 
@@ -57,7 +57,8 @@ Rude expects to be initialized at the root of your Git checkout directory.
 
 > **Status** Alpha
 
-Track assets by adding them to the Rude database:
+Track assets by adding them to the Rude database,
+assets are tracked by file name only:
 
     $ rude add path/to/file.ext
     [OKAY] New asset added to local database as 'file.ext'
@@ -65,13 +66,13 @@ Track assets by adding them to the Rude database:
 
 Assets are stored in a single bucket; each asset requires a unique name.
 Rude will error if you attempt to over write an existing asset.
+You can explicitly force updating an asset with `-f`:
 
     $ rude add -f path/to/new/file.ext
     [OKAY] Existing asset 'file.ext' replaced
     [INFO] Asset id 7e792aa144129cec0c25b1e2bd55bee50d30b866
 
-Rude will automatically add the asset to your `.gitignore` file,
-and update the Rude manifest.
+You should make sure your assets are not tracked by Git.
 
 ### Rude Manifest
 
@@ -88,7 +89,7 @@ It is a simple JSON encoded mapping matching asset names to their hash sums.
 
 This file _should_ be tracked in Git, in lieu of tracking the actual assets.
 
-## Usage
+## Project Usage
 
 Rude works by returning mapping asset names to URLs in your projects and templates.
 The URLs returned depend on runtime configurations.
@@ -99,9 +100,14 @@ Rude returns URLs from your local CouchDB database.
 
 > **Status** Alpha
 
+Rude will auto-configure itself based on environment variables:
+
+    - Set `RUDE_PREFIX` to your assets server (default `http://localhost:5984/rude`)
+    - Set `RUDE_ASSETS_FILE` to your asset menifest (default `assets.json`)
+
 Require Rude somewhere in your project:
 
-    var rude = require('rude')
+    var rude = require('rude').config()
     var rude('helloworld')
     
     console.log(rude)
@@ -109,6 +115,18 @@ Require Rude somewhere in your project:
 This will echo something like:
 
     http://localhost:5984/rude/7e792aa144129cec0c25b1e2bd55bee50d30b866/helloworld.jpg
+
+#### Advanced
+
+You can also pass in configurations programatically with:
+
+    var prefix = 'https://server.com/assets'
+    var config = JSON.parse(fs.readFileSync('myfile.json'))
+    
+    var rude = require('rude').config(prefix,config)
+    console.log( rude('helloworld') )
+
+A synchronous read _should_ be okay here, since it's only called on startup.
 
 ## Sharing
 
