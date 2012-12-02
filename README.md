@@ -89,7 +89,7 @@ Assets will always match your current branch.
 
 The Rude manifest is a single file at the root of your Git repository
 called `assets.json`.
-It is a simple JSON encoded mapping matching asset names to their hash sums.
+It is a JSON encoded mapping between asset names to their hash sum.
 
     {
         "helloworld": "7e792aa144129cec0c25b1e2bd55bee50d30b866", 
@@ -100,7 +100,8 @@ This file _should_ be tracked in Git, in lieu of tracking the actual assets.
 
 ## Project Usage
 
-Rude works by returning mapping asset names to URLs in your projects and templates.
+At runtime, your project asks Rude for assets by name,
+and Rude returns their URLs.
 The URLs returned depend on runtime configurations.
 When running locally in development,
 Rude returns URLs from your local CouchDB database.
