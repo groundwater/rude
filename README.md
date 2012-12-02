@@ -102,8 +102,8 @@ Rude returns URLs from your local CouchDB database.
 
 Rude will auto-configure itself based on environment variables:
 
-    - Set `RUDE_PREFIX` to your assets server (default `http://localhost:5984/rude`)
-    - Set `RUDE_ASSETS_FILE` to your asset menifest (default `assets.json`)
+- Set `RUDE_PREFIX` to your assets server (default `http://localhost:5984/rude`)
+- Set `RUDE_ASSETS_FILE` to your asset menifest (default `assets.json`)
 
 Require Rude somewhere in your project:
 
