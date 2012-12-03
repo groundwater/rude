@@ -167,7 +167,7 @@ You must set your AWS credentials using the
 environment variables `AWS_S3_KEY` and `AWS_S3_SECRET`.
 
     $ rude publish s3://bucket-name
-    
+
 ### SSH
 
 SSH publishing requires SSH keys, run:

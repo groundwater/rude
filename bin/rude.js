@@ -13,7 +13,6 @@ var rude    = require('../index')
 
 function connect(host,port,database){
 	var url = util.format('http://%s:%s/%s',host,port,database)
-	console.log(url)
 	var db  = nano(url)
 	return db
 }
