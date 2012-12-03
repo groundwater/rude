@@ -222,3 +222,9 @@ SSH publishing requires SSH keys, run:
 
     $ rude publish git://server.com:path/to/assets
 
+## Command Line Tips
+
+Get the URL of an asset e.g. `asset.png` 
+
+    rude list | grep asset.png | awk -s '{print $4}'
+
