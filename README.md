@@ -6,6 +6,7 @@ Rude is a distributed asset management system for web projects.
 - rude is distributed
 - rude plays nicely with git
 - rude stores assets in CouchDB
+- rude integrates with Amazon S3
 
 Rude keeps your git repositories _lean_ and focused on the code.
 
