@@ -52,7 +52,7 @@ program
 	
 	try{
 		var json = JSON.parse(file)
-		fs.writeFileSync(program.manifest,JSON.stringify(json))
+		fs.writeFileSync(program.manifest,JSON.stringify(json,null,'\t'))
 		log.Info('Asset Manifest at %s',program.manifest)
 		log.Okay('New Rude database initialized')
 	}catch(e){
