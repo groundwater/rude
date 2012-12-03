@@ -163,7 +163,7 @@ Rude can upload your assets to their appropriate servers, or distribution networ
 
 ### Amazon S3
 
-    $ rude publish s3
+    $ rude publish s3://bucket
     
 ### WebDAV
 
@@ -171,7 +171,7 @@ Rude can upload your assets to their appropriate servers, or distribution networ
 
 ### SSH
 
-    $ rude publish user@host:/path/to/web
+    $ rude publish git://server.com:path/to/assets
 
 
 

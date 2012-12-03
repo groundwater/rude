@@ -84,7 +84,9 @@ program
 		body : file
 	}
 	
-	db.save(hash, {}, function(err,res){
+	var id = hash
+	
+	db.save(id, {}, function(err,res){
 		if(err) return Error(err)
 		
 		db.saveAttachment(res,attachment,function(err,ok){
@@ -97,6 +99,7 @@ program
 		})
 		
 	})
+	
 })
 
 program
@@ -114,7 +117,8 @@ program
 })
 
 var publishers = {
-	'git': require('../lib/ssh').publish
+	'git': require('../lib/ssh').publish,
+	's3' : require('../lib/s3').publish
 }
 
 program

@@ -31,7 +31,8 @@
     "commander": "latest",
     "ssh2": "~0.1.6",
     "colors": "~0.6.0-1",
-    "async": "~0.1.22"
+    "async": "~0.1.22",
+    "knox": "~0.4.2"
   },
   "preferGlobal": true
 }
