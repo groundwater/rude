@@ -214,6 +214,8 @@ Region _must_ be one of the following:
 - `ap-northeast-1` (Asia Pacific Tokyo)
 - `sa-east-1` (South America Sao Paulo)
 
+Further more, your region _must_ agree with the region where your bucket has been created.
+
 ### SSH
 
 SSH publishing requires SSH keys, run:
