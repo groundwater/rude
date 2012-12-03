@@ -167,6 +167,10 @@ You must set your AWS credentials using the
 environment variables `AWS_S3_KEY` and `AWS_S3_SECRET`.
 
     $ rude publish s3://bucket-name
+    [INFO] Uploading to S3
+      √ Image1.png
+      √ Image2.png
+    [DONE] Use environment variable RUDE_PREFIX=https://bucket-name.s3-us-west-2.amazonaws.com
 
 ### SSH
 
