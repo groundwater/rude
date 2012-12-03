@@ -10,6 +10,21 @@ Rude is a distributed asset management system for web projects.
 
 Rude keeps your git repositories _lean_ and focused on the code.
 
+## Problem Statement
+
+Platform as a Service (PaaS) providers are increasingly popular nowadays.
+They let programmers focus on development, and leave systems adminstration to dedicated companies.
+Deployment is typically triggered by pushing a Git repository to the service provider.
+
+Either you must choose to include your binary assets in your Git deployment,
+or choose to host them elsewhere.
+Most people will agree that the foremer solution is not really a solution.
+Git retains all data indefinitely, and a repository can quickly bloat into multi-GBs
+if you keep shuffling assets in and out.
+The latter solution is very manual and error prone.
+
+Rude is a reliable solution to the above problem.
+
 ## Installation
 
 Installation of the Rude package is done via NPM:
