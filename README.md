@@ -150,9 +150,9 @@ Rude will auto-configure itself based on environment variables:
 Require Rude somewhere in your project:
 
     var rude = require('rude').config()
-    var rude('helloworld')
+    var url  = rude('helloworld')
     
-    console.log(rude)
+    console.log(url)
 
 This will echo something like:
 
