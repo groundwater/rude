@@ -18,10 +18,6 @@ function connect(host,port,database){
 	return db
 }
 
-function Error(){
-	log.Error.apply(this,arguments)
-}
-
 function strip(path){
 	var paths = path.split('/')
 	
@@ -75,7 +71,7 @@ function insert(db, doc,id,name,data,json,hash,file){
 			log.Okay('Asset Added to Manifest')
 			
 		} else if(err && err.error != 'conflict') {
-			return Error('Asset Conflict! Use `rude add -f %s` to Overwrite',name)
+			return log.Error('Asset Conflict! Use `rude add -f %s` to Overwrite',name)
 		} else {
 		
 			var type = 'text/plain'
@@ -84,7 +80,7 @@ function insert(db, doc,id,name,data,json,hash,file){
 			}
 		
 			db.attachment.insert(id, name, data, type, opts, function(err,ok){
-				if(err) return Error(err)
+				if(err) return log.Error(err)
 			
 				log.Okay('Asset Added:',name)
 			
@@ -104,8 +100,8 @@ program
 .option('-f, --force'      , 'force update')
 .description('Track a new asset in the local database')
 .action(function(asset,command){
-	if(asset == 'assets.json') return Error('Cannot Track Asset File')
-	if(arguments.length != 2 ) return Error('Please Specify an Asset to Track')
+	if(asset == 'assets.json') return log.Error('Cannot Track Asset File')
+	if(arguments.length != 2 ) return log.Error('Please Specify an Asset to Track')
 	
 	var db     = connect(program.host,program.port,program.name)
 	
@@ -131,7 +127,7 @@ program
 			if(err && err.status_code == 404){
 				doc = {}
 			}else if(err){
-				return Error(err)
+				return log.Error(err)
 			}
 			
 			insert(db,doc,id,name,data,json,hash,program.manifest)
@@ -148,7 +144,7 @@ program
 .description('Replicate your local database to URL')
 .action(function(url,command){
 	
-	if(!command) return Error('Please Specify a Remote URL for Replication')
+	if(!command) return log.Error('Please Specify a Remote URL for Replication')
 	
 	var db   = connect(program.host,program.port,program.name)
 	var opts = {
@@ -157,7 +153,7 @@ program
 	}
 	
 	var res = db.replicate(url,opts,function(err){
-		if(err) return Error('Replication Error:', err.error)
+		if(err) return log.Error('Replication Error:', err.error)
 		
 		log.Info('Replication Complete')
 	})
@@ -169,7 +165,7 @@ program
 .description('Pull remote changes into your local database')
 .action(function(url,command){
 	
-	if(!command) return Error('Please Specify a Remote URL for Synchronization')
+	if(!command) return log.Error('Please Specify a Remote URL for Synchronization')
 	
 	var db   = nano('http://' + program.host + ':' + program.port).db
 	var opts = {
@@ -178,7 +174,7 @@ program
 	}
 	
 	var res = db.replicate(url,program.name,opts,function(err){
-		if(err) return Error('Replication Error:', err.error)
+		if(err) return log.Error('Replication Error:', err.error)
 		
 		log.Info('Replication Complete')
 	})
@@ -205,7 +201,12 @@ program
 .description('Publish your assets to a production environment')
 .action(function(url,command){
 	
-	if(!command) return Error('Please Specify a Publishable URL')
+	if(!command) {
+		log.Error('Please Specify a Publishable URL')
+		log.Info('For SSH use ssh://server-name:relative/path or ssh://server-name:/absolute/path')
+		log.Info('For Amazon S3 use s3://region/bucket-name')
+		return
+	}
 	
 	var db   = connect(program.host,program.port,program.name)
 	var file = fs.readFileSync(program.manifest)
@@ -215,7 +216,7 @@ program
 	var prot = cons[0]
 	var dest = cons[1]
 	
-	if(!dest) return Error('Invalid URL, see `rude -h` for more info')
+	if(!dest) return log.Error('Invalid URL, see `rude -h` for more info')
 	
 	publishers[prot]( json, db, dest )
 	
@@ -257,7 +258,7 @@ program
 .description('Open an asset in your browser')
 .action(function(name,command){
 	
-	if(!command) return Error('Please Specify an Asset to Open')
+	if(!command) return log.Error('Please Specify an Asset to Open')
 	
 	var rude_ = rude.config()
 	

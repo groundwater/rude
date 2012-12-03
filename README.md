@@ -167,11 +167,21 @@ Rude can upload your assets to their appropriate servers, or distribution networ
 You must set your AWS credentials using the
 environment variables `AWS_S3_KEY` and `AWS_S3_SECRET`.
 
-    $ rude publish s3://bucket-name
+    $ rude publish s3://region/bucket-name
     [INFO] Uploading to S3
       √ Image1.png
       √ Image2.png
     [DONE] Use environment variable RUDE_PREFIX=https://bucket-name.s3-us-west-2.amazonaws.com
+
+Region _must_ be one of the following:
+
+- `us-standard` (US Standard)
+- `us-west-2` (US West Oregon)
+- `us-west-1` (US West Northern California)
+- `eu-west-1` (EU Ireland)
+- `ap-southeast-1` (Asia Pacific Singapore)
+- `ap-northeast-1` (Asia Pacific Tokyo)
+- `sa-east-1` (South America Sao Paulo)
 
 ### SSH
 
