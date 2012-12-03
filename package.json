@@ -27,12 +27,11 @@
     "rude": "bin/rude.js"
   },
   "dependencies": {
-    "cradle": "latest",
     "commander": "latest",
-    "ssh2": "~0.1.6",
-    "colors": "~0.6.0-1",
-    "async": "~0.1.22",
-    "knox": "~0.4.2"
+    "colors": "latest",
+    "async": "latest",
+    "knox": "latest",
+    "nano": "latest"
   },
   "preferGlobal": true
 }
