@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
 var fs      = require('fs')
+var cp      = require('child_process')
 var crypto  = require('crypto');
 var Path    = require('path')
+var util    = require('util')
 
 var program = require('commander')
 var cradle  = require('cradle');
+
+var rude    = require('../index')
 
 function connect(host,port,database){
 	return new(cradle.Connection)(host,port).database(database)
@@ -151,6 +155,48 @@ program
 	publishers[prot]( json, db, dest )
 	
 })
+
+function pad(string,min){
+	var out = string
+	for(var i=string.length; i<min; i++){
+		out += ' '
+	}
+	return out
+}
+
+program
+.command('list')
+.action(function(command){
+	
+	var db   = connect(program.host,program.port,program.name)
+	var file = fs.readFileSync(program.file)
+	var json = JSON.parse(file)
+	
+	var rude_ = rude.config()
+	
+	for(name in json){
+		
+		console.log("%s --> %s", pad(name,20), rude_(name))
+		
+	}
+	
+})
+
+program
+.command('open')
+.action(function(name,command){
+	
+	if(!command) return Error('Invalid Usage')
+	
+	var rude_ = rude.config()
+	
+	var exec_command = util.format( 'open "%s"', rude_(name) )
+	
+	cp.exec(exec_command)
+	
+})
+
+if(process.argv[2] == 'ls') process.argv[2] = 'list'
 
 program.parse(process.argv)
 
