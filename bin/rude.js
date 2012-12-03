@@ -40,7 +40,8 @@ program
 .command('init')
 .description('Initialize a new Rude database')
 .action(function(command){
-	connect(program.host,program.port,program.name).create()
+	
+	nano('http://' + program.host + ':' + program.port ).db.create(program.name)
 	
 	var file
 	try{
