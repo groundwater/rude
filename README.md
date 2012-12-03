@@ -59,6 +59,22 @@ without losing the guaruntees afforded by Git.
 Rude tracks your assets in a single inventory file that is lean,
 and easy to track using Git.
 
+## How it Works
+
+Rude creates and manages a local file called your **manifest**.
+The manifest is a list of all your asset names, and their SHA-1 hash.
+Your program can ask the Rude module for an asset by name,
+rude consults the manifest to lookup the assets hash,
+then returns a fully-qualified URL pointing to the matching asset.
+
+When running in development,
+Rude will store and retreive assets from a local CouchDB database.
+When your application is ready for production,
+Rude can upload your entire set of assets to S3, or another web server.
+
+Rude switches where it retreives assets from by consulting the environment variable `RUDE_PREFIX`.
+When running locally, this is set to `http://localhost:5984`, your local CouchDB instance.
+
 ## Command Line Usage
 
 > **Status** Alpha
