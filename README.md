@@ -140,7 +140,7 @@ A synchronous read _should_ be okay here, since it's only called on startup.
 
 ## Sharing
 
-> **Status** Planned
+> **Status** Alpha
 
 A system is not distributed unless without sharing between peers.
 Rude uses CouchDB replication to synchronize repositories.
@@ -156,29 +156,21 @@ You can pull down changes from the server with
 
 ## Production
 
-> **Status** Planned
+> **Status** Alpha
 
 When your project is ready for production,
 Rude can upload your assets to their appropriate servers, or distribution networks.
 
 ### Amazon S3
 
-    $ rude publish s3://bucket
+You must set your AWS credentials using the
+environment variables `AWS_S3_KEY` and `AWS_S3_SECRET`.
+
+    $ rude publish s3://bucket-name
     
-### WebDAV
-
-    $ rude publish http://server/dav
-
 ### SSH
 
+SSH publishing requires SSH keys, run:
+
     $ rude publish git://server.com:path/to/assets
-
-
-
-
-
-
-
-
-
 
