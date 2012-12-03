@@ -5,6 +5,7 @@ var cp      = require('child_process')
 var crypto  = require('crypto');
 var Path    = require('path')
 var util    = require('util')
+var log     = require('../lib/log')
 
 var program = require('commander')
 var nano    = require('nano');
@@ -18,7 +19,7 @@ function connect(host,port,database){
 }
 
 function Error(){
-	console.error.apply(this,arguments)
+	log.Error.apply(this,arguments)
 }
 
 function strip(path){
@@ -51,10 +52,10 @@ program
 	try{
 		var json = JSON.parse(file)
 		fs.writeFileSync(program.manifest,JSON.stringify(json))
-		console.log('[OKAY] New Rude database initialized')
-		console.log('[OKAY] Asset Manifest at %s',program.manifest)
+		log.Info('Asset Manifest at %s',program.manifest)
+		log.Okay('New Rude database initialized')
 	}catch(e){
-		console.error('[FAIL] Asset File Exists and is Invalid')
+		log.Error('Asset File Exists and is Invalid')
 	}
 	
 	
@@ -65,12 +66,12 @@ function insert(db, doc,id,name,data,json,hash,file){
 		
 		if(err && err.error=='conflict'){
 			
-			console.log('[INFO] Asset Already in Database')
+			log.Info('Asset Already in Database')
 			
 			json[name] = hash
 			fs.writeFileSync(file, JSON.stringify(json,null,'\t'))
 			
-			console.log('[INFO] Asset Added to Manifest')
+			log.Okay('Asset Added to Manifest')
 			
 		} else if(err && err.error != 'conflict') {
 			return Error('Asset Conflict! Use `rude add -f %s` to Overwrite',name)
@@ -84,7 +85,7 @@ function insert(db, doc,id,name,data,json,hash,file){
 			db.attachment.insert(id, name, data, type, opts, function(err,ok){
 				if(err) return Error(err)
 			
-				console.log('Asset Added:',name)
+				log.Okay('Asset Added:',name)
 			
 				json[name] = hash
 				fs.writeFileSync(file, JSON.stringify(json,null,'\t'))
@@ -103,7 +104,7 @@ program
 .description('Track a new asset in the local database')
 .action(function(asset,command){
 	if(asset == 'assets.json') return Error('Cannot Track Asset File')
-	if(arguments.length != 2 ) return Error('Incorrect Usage')
+	if(arguments.length != 2 ) return Error('Please Specify an Asset to Track')
 	
 	var db     = connect(program.host,program.port,program.name)
 	
@@ -146,7 +147,7 @@ program
 .description('Replicate your local database to URL')
 .action(function(url,command){
 	
-	if(!command) return Error('Invalid Usage')
+	if(!command) return Error('Please Specify a Remote URL for Replication')
 	
 	var db   = connect(program.host,program.port,program.name)
 	var opts = {
@@ -157,7 +158,7 @@ program
 	var res = db.replicate(url,opts,function(err){
 		if(err) return Error('Replication Error:', err.error)
 		
-		console.log('[DONE] Replication Complete')
+		log.Info('Replication Complete')
 	})
 })
 
@@ -167,7 +168,7 @@ program
 .description('Pull remote changes into your local database')
 .action(function(url,command){
 	
-	if(!command) return Error('Invalid Usage')
+	if(!command) return Error('Please Specify a Remote URL for Synchronization')
 	
 	var db   = nano('http://' + program.host + ':' + program.port).db
 	var opts = {
@@ -178,7 +179,7 @@ program
 	var res = db.replicate(url,program.name,opts,function(err){
 		if(err) return Error('Replication Error:', err.error)
 		
-		console.log('[DONE] Replication Complete')
+		log.Info('Replication Complete')
 	})
 })
 
@@ -203,7 +204,7 @@ program
 .description('Publish your assets to a production environment')
 .action(function(url,command){
 	
-	if(!command) return Error('Invalid Usage')
+	if(!command) return Error('Please Specify a Publishable URL')
 	
 	var db   = connect(program.host,program.port,program.name)
 	var file = fs.readFileSync(program.manifest)
@@ -238,11 +239,15 @@ program
 	
 	var rude_ = rude.config()
 	
+	var i=0
 	for(name in json){
 		
-		console.log("%s --> %s", pad(name,20), rude_(name))
+		log.Info("%s --> %s", pad(name,20), rude_(name))
+		i++
 		
 	}
+	
+	log.Done('Total %d Assets',i)
 	
 })
 
@@ -251,7 +256,7 @@ program
 .description('Open an asset in your browser')
 .action(function(name,command){
 	
-	if(!command) return Error('Invalid Usage')
+	if(!command) return Error('Please Specify an Asset to Open')
 	
 	var rude_ = rude.config()
 	
@@ -271,8 +276,8 @@ program
 	
 	fs.writeFileSync(program.manifest, JSON.stringify(manifest))
 	
-	console.log('[INFO] Asset %s Removed from Manifest',name)
-	console.log('[INFO] Use `rude purge %s` to Permenantly Delete Asset from Database',name)
+	log.Info('Use `rude purge %s` to Permenantly Delete Asset from Database',name)
+	log.Okay('Asset %s Removed from Manifest',name)
 	
 })
 
