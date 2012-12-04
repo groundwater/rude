@@ -107,11 +107,17 @@ You can explicitly force updating an asset with `-f`:
     [OKAY] Existing asset 'file.ext' replaced
     [INFO] Asset id 7e792aa144129cec0c25b1e2bd55bee50d30b866
 
+Each time you add or replace an asset, 
+Rude will upate a file at the root of your repository called
+`assets.json`.
+Rude will also upload the asset to your local CouchDB database.
+
 Your `assets.json` file _should_ be tracked by git,
 and is explicitly formatted to make merging easier.
 This file contains explicit pointers to all your assets,
 each represented by a unique SHA-1 hash.
-Assets will always match your current branch.
+Since this file is tracked by git,
+Rude will always return URLs that match the currently checked out branch.
 
 - You should not track assets in Git.
 
