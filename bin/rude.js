@@ -119,6 +119,7 @@ program
 	var shasum = crypto.createHash('sha1');
 	
 	if(!fs.existsSync(asset)) return log.Error('Nothing Exists at `%s`',asset)
+	if(!fs.statSync(asset).isFile()) return log.Error('You Can Only Add Files')
 	
 	var data   = fs.readFileSync(asset)
 	var json
