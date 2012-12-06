@@ -118,6 +118,8 @@ program
 	var name   = command.name || strip(asset)
 	var shasum = crypto.createHash('sha1');
 	
+	if(!fs.existsSync(asset)) return log.Error('Nothing Exists at `%s`',asset)
+	
 	var data   = fs.readFileSync(asset)
 	var json
 	try{
