@@ -202,9 +202,8 @@ program
 	'',
 	'Rude accepts ssh, http, and s3 URLs:',
 	'',
-	'  rude publish s3://bucket',
+	'  rude publish s3://region/bucket',
 	'  rude publish ssh://server/path',
-	'  rude publish http://server/path',
 	'',
 	'Amazon S3 publish requires the ENV variables AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY'
 ].join('\n  '))
@@ -214,7 +213,8 @@ program
 	if(!command) {
 		log.Error('Please Specify a Publishable URL')
 		log.Info('For SSH use ssh://server-name:relative/path or ssh://server-name:/absolute/path')
-		log.Info('For Amazon S3 use s3://region/bucket-name')
+		log.Info('For Amazon S3 use s3://region/bucket-name,')
+		log.Info(' - ensure to set the AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables')
 		return
 	}
 	
