@@ -5,12 +5,13 @@ var cp      = require('child_process')
 var crypto  = require('crypto');
 var Path    = require('path')
 var util    = require('util')
-var log     = require('../lib/log')
 
 var program = require('commander')
 var nano    = require('nano');
 
 var rude    = require('../index')
+var log     = require('../lib/log')
+var git     = require('../lib/git')
 
 function connect(host,port,database){
 	var url = util.format('http://%s:%s/%s',host,port,database)
@@ -26,11 +27,20 @@ function strip(path){
 	return paths.pop()
 }
 
+var assetfile
+try{
+	assetfile = Path.join(git.gitroot('.'),'assets.json')
+	log.Info('Found Asset File',assetfile)
+}catch(e){
+	log.Warn('No Git Repository Found')
+	assetfile = 'asset.json'
+}
+
 program.version('0.0.0');
 program.option('-n, --name      <NAME>' , 'use database NAME'    ,'rude')
 program.option('-H, --host      <HOST>' , 'connect to host NAME' ,'localhost')
 program.option('-p, --port      <PORT>' , 'connect to port PORT' ,5984)
-program.option('-m, --manifest  <FILE>' , 'track assets in manifest FILE' ,'assets.json')
+program.option('-m, --manifest  <FILE>' , 'track assets in manifest FILE' , assetfile)
 
 program
 .command('init')
@@ -288,6 +298,11 @@ if(process.argv[2] == 'ls') process.argv[2] = 'list'
 program.parse(process.argv)
 
 if(program.args.length==0) {
+	console.log('      ____  __  ______  ______'.red)
+	console.log('     / __ \\/ / / / __ \\/ ____/'.red)
+	console.log('    / /_/ / / / / / / / __/   '.red)
+	console.log('   / _  _/ /_/ / /_/ / /___   '.red)
+	console.log('  /_/ |_|\\____/_____/_____/   '.red)
 	program.help();
 }
 
