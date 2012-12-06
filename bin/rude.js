@@ -93,6 +93,7 @@ function insert(db, doc,id,name,data,json,hash,file){
 				if(err) return log.Error(err)
 			
 				log.Okay('Asset Added:',name)
+				log.Info('Use Asset with `rude(\'%s\')`',name)
 			
 				json[name] = hash
 				fs.writeFileSync(file, JSON.stringify(json,null,'\t'))
