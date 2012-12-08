@@ -142,8 +142,9 @@ Rude makes no attempt to get into the revision control business.
 Git does that very well, and it would be counter-productive to track revisions in two places.
 What Rude really does is make it _very easy_ to track project assets with git.
 Rather than adding the large [BLOBs](http://en.wikipedia.org/wiki/Binary_large_object) directly,
-you can just add pointers each asset.
-Rude is just a _pointer resolver_ in a sense.
+you just add pointers each asset.
+
+> Rude is just a _pointer resolver_ mapping names to hashes, and hashes to fully-qualified URLs
 
 Since the assets file is tracked by Git, it is formatted by Rude in a Git-friendly way.
 Git tracks changes per-line, so Rude writes one asset per line.
