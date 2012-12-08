@@ -271,6 +271,15 @@ Get the URL of an asset e.g. `asset.png`
 
     rude list | grep asset.png | awk -s '{print $4}'
 
+# Todo
+
+- set explicit content-types when adding assets
+- better errors when trying to re-add an existing asset (give the other name)
+- fine-grained replication between CouchDBs
+- add ability to format hash-id via `RUDE_PREFIX`
+    - e.g. 0000-0000, 0000/0000
+    - splitting the hashes into multiple subdirectories will make S3 management more sane
+
 # License
 
 Copyright (C) 2012 Jacob Groundwater
