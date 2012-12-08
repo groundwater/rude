@@ -136,6 +136,20 @@ It is a JSON encoded mapping between asset names to their hash sum.
 
 This file _should_ be tracked in Git, in lieu of tracking the actual assets.
 
+#### Managing the Assets File with Git
+
+Rude makes no attempt to get into the revision control business.
+Git does that very well, and it would be counter-productive to track revisions in two places.
+What Rude really does is make it _very easy_ to track project assets with git.
+Rather than adding the large [BLOBs](http://en.wikipedia.org/wiki/Binary_large_object) directly,
+you can just add pointers each asset.
+Rude is just a _pointer resolver_ in a sense.
+
+Since the assets file is tracked by Git, it is formatted by Rude in a Git-friendly way.
+Git tracks changes per-line, so Rude writes one asset per line.
+The file is still valid JSON, just padded with useful whitespace.
+A Git diff between revisions will _only_ show the assets that have changed.
+
 ## Project Usage
 
 At runtime, your project asks Rude for assets by name,
