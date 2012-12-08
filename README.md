@@ -164,6 +164,28 @@ This will echo something like:
 
     http://localhost:5984/rude/7e792aa144129cec0c25b1e2bd55bee50d30b866/helloworld.jpg
 
+#### Express
+
+Rude integrates fairly well with [Express](https://npmjs.org/package/express) 
+and [Jade](https://npmjs.org/package/jade).
+
+Require Rude and attach it to your Express app:
+
+    var app  = require('express')()
+    var rude = require('rude').config()
+    
+    app.locals.rude = rude
+    
+    app.get('/', ...)
+
+You can then call Rude from your Jade template wherever you require a link to your asset:
+
+    body
+        img.icon( src="#{rude('coming_soon.png')}", alt="Logo" )
+        ...
+    
+A similar technique can be used in any template language that allows function calls.
+
 #### Advanced
 
 You can also pass in configurations programatically with:
