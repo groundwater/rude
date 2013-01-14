@@ -1,0 +1,384 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Rude by jacobgroundwater</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Rude</h1>
+        <p>Distributed Asset Management</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/jacobgroundwater/rude" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/jacobgroundwater/rude/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/jacobgroundwater/rude/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>Rude Distributed Asset Management</h1>
+
+<p>Rude is a distributed asset management system for web projects.</p>
+
+<ul>
+<li>rude is a command-line driven</li>
+<li>rude is distributed</li>
+<li>rude plays nicely with git</li>
+<li>rude stores assets in CouchDB</li>
+<li>rude integrates with Amazon S3</li>
+</ul><p>Rude keeps your git repositories <em>lean</em> and focused on the code.</p>
+
+<h2>Problem Statement</h2>
+
+<p>Platform as a Service (PaaS) providers are increasingly popular nowadays.
+They let programmers focus on development, and leave systems adminstration to dedicated companies.
+Deployment is typically triggered by pushing a Git repository to the service provider.</p>
+
+<p>Either you must choose to include your binary assets in your Git deployment,
+or choose to host them elsewhere.
+Most people will agree that the foremer solution is not really a solution.
+Git retains all data indefinitely, and a repository can quickly bloat into multi-GBs
+if you keep shuffling assets in and out.
+The latter solution is very manual and error prone.</p>
+
+<p>Rude is a reliable solution to the above problem.</p>
+
+<h2>Installation</h2>
+
+<p>Installation of the Rude package is done via NPM:</p>
+
+<pre><code>npm install -g rude
+</code></pre>
+
+<p><em>Dependencies</em>:</p>
+
+<ul>
+<li>Rude uses a local <a href="http://couchdb.apache.org/">CouchDB</a> database to store assets.</li>
+<li><strong>CouchDB must be installed separately</strong></li>
+</ul><h3>CouchDB on Mac OS X</h3>
+
+<p>We recommend using <a href="http://mxcl.github.com/homebrew/">homebrew</a> to install CouchDB.</p>
+
+<pre><code>brew install couchdb
+</code></pre>
+
+<p>Homebrew will guide you how to make CouchDB auto-start if you require.</p>
+
+<h2>Assets</h2>
+
+<p>Rude manages assets for web projects.</p>
+
+<p>A web project may contain a lot of images,
+videos, gzipped downloads, etc.
+These are inappropriate for storage in Git.
+Git sees a project in its entirety, 
+and shuffling large binary assets in and out will bloat your repository.
+Rude lets you separate your assets, 
+without losing the guaruntees afforded by Git.</p>
+
+<p>Rude tracks your assets in a single inventory file that is lean,
+and easy to track using Git.</p>
+
+<h2>How it Works</h2>
+
+<p>Rude creates and manages a local file called your <strong>manifest</strong>.
+The manifest is a list of all your asset names, and their SHA-1 hash.
+Your program can ask the Rude module for an asset by name,
+rude consults the manifest to lookup the assets hash,
+then returns a fully-qualified URL pointing to the matching asset.</p>
+
+<p>When running in development,
+Rude will store and retreive assets from a local CouchDB database.
+When your application is ready for production,
+Rude can upload your entire set of assets to S3, or another web server.</p>
+
+<p>Rude switches where it retreives assets from by consulting the environment variable <code>RUDE_PREFIX</code>.
+When running locally, this is set to <code>http://localhost:5984</code>, your local CouchDB instance.</p>
+
+<h2>Command Line Usage</h2>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>Create a new local repository:</p>
+
+<pre><code>$ rude init
+[OKAY] New local rude database initialized at http://localhost:5984/rude
+</code></pre>
+
+<p>Rude expects to be initialized at the root of your Git checkout directory.
+The <code>init</code> command is idempotent, calling <code>init</code> on an existing project
+will not overwrite an existing setup.</p>
+
+<h3>Tracking Assets</h3>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>Track assets by adding them to the Rude database,
+assets are tracked by file name only:</p>
+
+<pre><code>$ rude add path/to/file.ext
+[OKAY] New asset added to local database as 'file.ext'
+[INFO] Asset id 012927f794d2462ae6d5b0bcf1ee01bfb16571cc
+</code></pre>
+
+<p>Assets are stored in a single bucket; each asset requires a unique name.
+Rude will error if you attempt to over write an existing asset.
+You can explicitly force updating an asset with <code>-f</code>:</p>
+
+<pre><code>$ rude add -f path/to/new/file.ext
+[OKAY] Existing asset 'file.ext' replaced
+[INFO] Asset id 7e792aa144129cec0c25b1e2bd55bee50d30b866
+</code></pre>
+
+<p>Each time you add or replace an asset, 
+Rude will upate a file at the root of your repository called
+<code>assets.json</code>.
+Rude will also upload the asset to your local CouchDB database.</p>
+
+<p>Your <code>assets.json</code> file <em>should</em> be tracked by git,
+and is explicitly formatted to make merging easier.
+This file contains explicit pointers to all your assets,
+each represented by a unique SHA-1 hash.
+Since this file is tracked by git,
+Rude will always return URLs that match the currently checked out branch.</p>
+
+<ul>
+<li>You should not track assets in Git.</li>
+</ul><h3>Rude Manifest</h3>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>The Rude manifest is a single file at the root of your Git repository
+called <code>assets.json</code>.
+It is a JSON encoded mapping between asset names to their hash sum.</p>
+
+<pre><code>{
+    "helloworld": "7e792aa144129cec0c25b1e2bd55bee50d30b866", 
+    "goodbye": "f4485f480d8e52aca885ddadbeed186bc2682500"
+}
+</code></pre>
+
+<p>This file <em>should</em> be tracked in Git, in lieu of tracking the actual assets.</p>
+
+<h4>Managing the Assets File with Git</h4>
+
+<p>Rude makes no attempt to get into the revision control business.
+Git does that very well, and it would be counter-productive to track revisions in two places.
+What Rude really does is make it <em>very easy</em> to track project assets with git.
+Rather than adding the large <a href="http://en.wikipedia.org/wiki/Binary_large_object">BLOBs</a> directly,
+you just add pointers each asset.</p>
+
+<blockquote>
+<p>Rude is just a <em>pointer resolver</em> mapping names to hashes, and hashes to fully-qualified URLs</p>
+</blockquote>
+
+<p>Since the assets file is tracked by Git, it is formatted by Rude in a Git-friendly way.
+Git tracks changes per-line, so Rude writes one asset per line.
+The file is still valid JSON, just padded with useful whitespace.
+A Git diff between revisions will <em>only</em> show the assets that have changed.</p>
+
+<h2>Project Usage</h2>
+
+<p>At runtime, your project asks Rude for assets by name,
+and Rude returns their URLs.
+The URLs returned depend on runtime configurations.
+When running locally in development,
+Rude returns URLs from your local CouchDB database.</p>
+
+<h3>Node.js</h3>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>Rude will auto-configure itself based on environment variables:</p>
+
+<ul>
+<li>Set <code>RUDE_PREFIX</code> to your assets server (default <code>http://localhost:5984/rude</code>)</li>
+<li>Set <code>RUDE_ASSETS_FILE</code> to your asset menifest (default <code>assets.json</code>)</li>
+</ul><p>Require Rude somewhere in your project:</p>
+
+<pre><code>var rude = require('rude').config()
+var url  = rude('helloworld')
+
+console.log(url)
+</code></pre>
+
+<p>This will echo something like:</p>
+
+<pre><code>http://localhost:5984/rude/7e792aa144129cec0c25b1e2bd55bee50d30b866/helloworld.jpg
+</code></pre>
+
+<h4>Express</h4>
+
+<p>Rude integrates fairly well with <a href="https://npmjs.org/package/express">Express</a> 
+and <a href="https://npmjs.org/package/jade">Jade</a>.</p>
+
+<p>Require Rude and attach it to your Express app:</p>
+
+<pre><code>var app  = require('express')()
+var rude = require('rude').config()
+
+app.locals.rude = rude
+
+app.get('/', ...)
+</code></pre>
+
+<p>You can then call Rude from your Jade template wherever you require a link to your asset:</p>
+
+<pre><code>body
+    img.icon( src="#{rude('coming_soon.png')}", alt="Logo" )
+    ...
+</code></pre>
+
+<p>A similar technique can be used in any template language that allows function calls.</p>
+
+<h4>Advanced</h4>
+
+<p>You can also pass in configurations programatically with:</p>
+
+<pre><code>var prefix = 'https://server.com/assets'
+var config = JSON.parse(fs.readFileSync('myfile.json'))
+
+var rude = require('rude').config(prefix,config)
+console.log( rude('helloworld') )
+</code></pre>
+
+<p>A synchronous read <em>should</em> be okay here, since it's only called on startup.</p>
+
+<h2>Sharing</h2>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>A system is not distributed unless without sharing between peers.
+Rude uses CouchDB replication to synchronize repositories.</p>
+
+<p>You can manage replication using CouchDB, or have Rude trigger replication manually:</p>
+
+<pre><code>$ rude push https://some-server/rude
+</code></pre>
+
+<p>This will replicate your database changes to the remote server.
+You can pull down changes from the server with </p>
+
+<pre><code>$ rude pull https://some-server/rude
+</code></pre>
+
+<h2>Production</h2>
+
+<blockquote>
+<p><strong>Status</strong> Alpha</p>
+</blockquote>
+
+<p>When your project is ready for production,
+Rude can upload your assets to their appropriate servers, or distribution networks.</p>
+
+<h3>Amazon S3</h3>
+
+<p>You must set your AWS credentials using the
+environment variables <code>AWS_S3_KEY</code> and <code>AWS_S3_SECRET</code>.</p>
+
+<pre><code>$ rude publish s3://region/bucket-name
+[INFO] Uploading to S3
+  √ Image1.png
+  √ Image2.png
+[DONE] Use environment variable RUDE_PREFIX=https://bucket-name.s3-us-west-2.amazonaws.com
+</code></pre>
+
+<p>Region <em>must</em> be one of the following:</p>
+
+<ul>
+<li>
+<code>us-standard</code> (US Standard)</li>
+<li>
+<code>us-west-2</code> (US West Oregon)</li>
+<li>
+<code>us-west-1</code> (US West Northern California)</li>
+<li>
+<code>eu-west-1</code> (EU Ireland)</li>
+<li>
+<code>ap-southeast-1</code> (Asia Pacific Singapore)</li>
+<li>
+<code>ap-northeast-1</code> (Asia Pacific Tokyo)</li>
+<li>
+<code>sa-east-1</code> (South America Sao Paulo)</li>
+</ul><p>Further more, your region <em>must</em> agree with the region where your bucket has been created.</p>
+
+<h3>SSH</h3>
+
+<p>SSH publishing requires SSH keys, run:</p>
+
+<pre><code>$ rude publish git://server.com:path/to/assets
+</code></pre>
+
+<h2>Command Line Tips</h2>
+
+<p>Get the URL of an asset e.g. <code>asset.png</code> </p>
+
+<pre><code>rude list | grep asset.png | awk -s '{print $4}'
+</code></pre>
+
+<h1>Todo</h1>
+
+<ul>
+<li>set explicit content-types when adding assets</li>
+<li>better errors when trying to re-add an existing asset (give the other name)</li>
+<li>fine-grained replication between CouchDBs</li>
+<li>add ability to format hash-id via <code>RUDE_PREFIX</code>
+
+<ul>
+<li>e.g. <code>0000-0000</code>, <code>0000/0000</code>
+</li>
+<li>splitting the hashes into multiple subdirectories will make S3 management more sane</li>
+</ul>
+</li>
+</ul><h1>License</h1>
+
+<p>Copyright (C) 2012 Jacob Groundwater</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/jacobgroundwater">jacobgroundwater</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
