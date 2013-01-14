@@ -1,7 +1,7 @@
 {
   "name": "rude",
-  "version": "0.0.5",
-  "description": "Distributed Asset Management",
+  "version": "0.0.6",
+  "description": "Distributed Asset Management that Integrates with Git",
   "main": "index.js",
   "keywords": [
     "git",
