@@ -36,9 +36,9 @@ try{
 }
 
 program.version('0.0.0');
-program.option('-n, --name      <NAME>' , 'use database NAME'    ,'rude')
-program.option('-H, --host      <HOST>' , 'connect to host NAME' ,'localhost')
-program.option('-p, --port      <PORT>' , 'connect to port PORT' ,5984)
+program.option('-n, --name      <NAME>' , 'use CouchDB database NAME'    ,'rude')
+program.option('-H, --host      <HOST>' , 'connect to CouchDB host NAME' ,'localhost')
+program.option('-p, --port      <PORT>' , 'connect to CouchDB port PORT' ,5984)
 program.option('-m, --manifest  <FILE>' , 'track assets in manifest FILE' , assetfile)
 
 program
