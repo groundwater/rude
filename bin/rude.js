@@ -30,7 +30,6 @@ function strip(path){
 var assetfile
 try{
 	assetfile = Path.join(git.gitroot('.'),'assets.json')
-	log.Info('Found Asset File',assetfile)
 }catch(e){
 	log.Warn('No Git Repository Found')
 	assetfile = 'asset.json'
@@ -47,41 +46,73 @@ program
 .description('Initialize a new Rude database')
 .action(function(command){
 	
-	nano('http://' + program.host + ':' + program.port ).db.create(program.name)
-	
 	var file
 	try{
 		file = fs.readFileSync(program.manifest)
+        log.Info('Found Assets File',program.manifest)
 	}catch(e){
 		file = "{}"
+        log.Info('Creating New Assets File',program.manifest)
 	}
-	
+
 	try{
 		var json = JSON.parse(file)
 		fs.writeFileSync(program.manifest,JSON.stringify(json,null,'\t'))
-		log.Info('Asset Manifest at %s',program.manifest)
-		log.Okay('New Rude database initialized')
 	}catch(e){
 		log.Error('Asset File Exists and is Invalid')
 	}
-	
+    
+	nano('http://' + program.host + ':' + program.port ).db.create(program.name,function(err,ok){
+        
+        if(err) {
+            if(err.status_code == 412){
+                log.Info('You already have a CouchDB Instance Created!')
+            }else{
+                log.Error('CouchDB Error');
+                log.Data(err);
+                log.Warn('Do you have a local CouchDB instance running?')
+            }
+        }else{
+    		log.Okay('New Rude database initialized in CouchDB')
+        }
+        
+	})
 	
 })
 
-function insert(db, doc,id,name,data,json,hash,file){
+// TODO: Refactor this into a class
+function insert(db,doc,id,name,data,json,hash,file){
+    
 	db.insert(doc, id, function(err,res){
 		
 		if(err && err.error=='conflict'){
 			
-			log.Info('Asset Already in Database')
-			
-			json[name] = hash
-			fs.writeFileSync(file, JSON.stringify(json,null,'\t'))
-			
-			log.Okay('Asset Added to Manifest')
+			return db.get(id, {}, function(err,body){
+				if (err) {
+                    log.Error('Error!');
+                    log.Data(err)
+                    
+                    return 
+                }
+				
+				var attachments = Object.keys(body._attachments);
+				var attachment	= attachments[0];
+				log.Info('Attachment Already Exists with Name %s',attachment.white);
+				
+				json[attachment] = hash
+				fs.writeFileSync(file, JSON.stringify(json,null,'\t'))
+				
+				log.Info('Use Asset with `rude(\'%s\')`', attachment);
+				
+			});
 			
 		} else if(err && err.error != 'conflict') {
-			return log.Error('Asset Conflict! Use `rude add -f %s` to Overwrite',name)
+			
+            log.Error('Error Adding Asset',name.white)
+            log.Data(err)
+            
+            return
+            
 		} else {
 		
 			var type = 'text/plain'
@@ -107,8 +138,7 @@ function insert(db, doc,id,name,data,json,hash,file){
 
 program
 .command('add')
-.option('-n, --name <NAME>', 'track asset using NAME', null)
-.option('-f, --force'      , 'force update')
+.option('-f, --file <NAME>', 'track asset using NAME', null)
 .description('Track a new asset in the local database')
 .action(function(asset,command){
 	if(asset == 'assets.json') return log.Error('Cannot Track Asset File')
@@ -116,7 +146,7 @@ program
 	
 	var db     = connect(program.host,program.port,program.name)
 	
-	var name   = command.name || strip(asset)
+	var name   = command.file || strip(asset)
 	var shasum = crypto.createHash('sha1');
 	
 	if(!fs.existsSync(asset)) return log.Error('Nothing Exists at `%s`',asset)
@@ -136,19 +166,7 @@ program
 	
 	var id = hash
 	
-	if(command.force){
-		doc = db.get(id, function(err,doc){
-			if(err && err.status_code == 404){
-				doc = {}
-			}else if(err){
-				return log.Error(err)
-			}
-			
-			insert(db,doc,id,name,data,json,hash,program.manifest)
-		})
-	}else{
-		insert(db,{},id,name,data,json,hash,program.manifest)
-	}
+	insert(db,{},id,name,data,json,hash,program.manifest)
 	
 })
 
@@ -216,9 +234,9 @@ program
 	
 	if(!command) {
 		log.Error('Please Specify a Publishable URL')
-		log.Info('For SSH use ssh://server-name:relative/path or ssh://server-name:/absolute/path')
-		log.Info('For Amazon S3 use s3://region/bucket-name,')
-		log.Info(' - ensure to set the AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables')
+		log.Info('For %s use ssh://server-name:relative/path or ssh://server-name:/absolute/path','SSH'.bold)
+		log.Info('For %s use s3://region/bucket-name','Amazon S3'.bold)
+		log.Info('Ensure to set the AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables')
 		return
 	}
 	
@@ -263,7 +281,7 @@ program
 		
 	}
 	
-	log.Done('Total %d Assets',i)
+	log.Info('Total %d Assets',i)
 	
 })
 
