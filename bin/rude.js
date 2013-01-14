@@ -310,7 +310,6 @@ program
 	
 	fs.writeFileSync(program.manifest, JSON.stringify(manifest))
 	
-	log.Info('Use `rude purge %s` to Permenantly Delete Asset from Database',name)
 	log.Okay('Asset %s Removed from Manifest',name)
 	
 })
