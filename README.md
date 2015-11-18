@@ -13,7 +13,7 @@ Rude keeps your git repositories _lean_ and focused on the code.
 ## Problem Statement
 
 Platform as a Service (PaaS) providers are increasingly popular nowadays.
-They let programmers focus on development, and leave systems adminstration to dedicated companies.
+They let programmers focus on development, and leave systems administration to dedicated companies.
 Deployment is typically triggered by pushing a Git repository to the service provider.
 
 Either you must choose to include your binary assets in your Git deployment,
